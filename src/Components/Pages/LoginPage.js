@@ -60,7 +60,7 @@ function addListenerToRegisterText() {
 function onLoginText(e) {
     e.preventDefault();
 
-    Navigate(`${process.env.PATH_PREFIX}register`);
+    Navigate(`/register`);
 
     return true;
 };

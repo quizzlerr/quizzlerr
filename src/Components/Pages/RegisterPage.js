@@ -75,7 +75,7 @@ function addListenerToLoginText() {
 function onLoginText(e) {
   e.preventDefault();
 
-  Navigate(`${process.env.PATH_PREFIX}login`);
+  Navigate(`/login`);
 
   return true;
 }
@@ -93,7 +93,7 @@ function addListenerToConfidentialityText() {
 function onConfidentialityText(e) {
   e.preventDefault();
 
-  Navigate(`${process.env.PATH_PREFIX}confidentiality`);
+  Navigate(`/confidentiality`);
 
   return true;
 }
