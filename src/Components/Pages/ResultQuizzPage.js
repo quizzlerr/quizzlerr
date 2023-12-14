@@ -102,7 +102,7 @@ function addListenerToButton() {
 
         e.preventDefault();
 
-        Navigate('/leaderboard')
+        Navigate('/leaderboard');
 
     });
 }
