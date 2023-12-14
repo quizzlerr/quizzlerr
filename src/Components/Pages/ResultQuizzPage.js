@@ -102,7 +102,7 @@ function addListenerToButton() {
 
         e.preventDefault();
 
-        Navigate(`${process.env.PATH_PREFIX}leaderboard`)
+        Navigate('/leaderboard')
 
     });
 }
