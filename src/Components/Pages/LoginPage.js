@@ -5,6 +5,13 @@ import Navigate from '../Router/Navigate';
 import { loginUser } from '../../utils/authsQueries';
 
 const LoginPage = () => {
+
+    renderLoginPage();
+
+};
+
+function renderLoginPage() {
+
     const main = document.querySelector('main');
     main.innerHTML = 
     `
@@ -39,20 +46,23 @@ const LoginPage = () => {
     `
     const submitButton = document.querySelector("#loginForm");
     submitButton.addEventListener('submit', onLogin);
-  };
-  
-  async function onLogin(e) {
+
+}
+
+async function onLogin(e) {
     e.preventDefault();
-  
+
     const username = document.querySelector('#username').value;
     const password = document.querySelector('#password').value;
 
     const authenticatedUser = await loginUser( username, password );
-  
+
     setAuthenticatedUser(authenticatedUser);
     Navbar();
-  
+
     Navigate('/');
-  }
+
+    return true;
+}
 
   export default LoginPage;

@@ -8,6 +8,10 @@ import { registerUser } from '../../utils/authsQueries';
 const RegisterPage = () => {
     clearPage();
     renderPageTitle('Register');
+    renderRegisterPage();
+};
+
+function renderRegisterPage() {
 
     const main = document.querySelector('main');
     main.innerHTML = 
@@ -52,17 +56,16 @@ const RegisterPage = () => {
                 <a href="/login">Vous possédez un compte ?</a>
             </div>
         </div>
-    </div>
-
-    `
+    </div>`;
 
     const submitButton = document.querySelector("#registerForm");
     submitButton.addEventListener('submit', onRegister);
-  };
 
-  async function onRegister(e) {
+};
+
+async function onRegister(e) {
     e.preventDefault();
-  
+
     const email = document.querySelector('#registerEmail').value;
     const password = document.querySelector('#registerPassword').value;
     const confPassword = document.querySelector('#registerConfPassword').value;
@@ -70,15 +73,17 @@ const RegisterPage = () => {
 
     if (password !== confPassword) {
         throw new Error ("Passwords do not match");
-    }
+    };
 
     const authenticatedUser = await registerUser( email, username, password );
-    
+
     setAuthenticatedUser(authenticatedUser);
-      
+        
     Navbar();
 
-    return Navigate('/');
+    Navigate('/');
+
+    return true;
 }
 
   export default RegisterPage;
