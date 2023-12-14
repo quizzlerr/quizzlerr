@@ -1,8 +1,8 @@
-import imageAlexis from "../../img/Alexis.jpg";
-import imageSimon from "../../img/Simon.jpg";
-import imageIsmet from "../../img/Ismet.jpg";
-import imageKeyvan from "../../img/Keyvan.jpg";
-import imageNico from "../../img/Nicolas.jpg";
+import imageAlexis from '../../img/Alexis.jpg';
+import imageSimon from '../../img/Simon.jpg';
+import imageIsmet from '../../img/Ismet.jpg';
+import imageKeyvan from '../../img/Keyvan.jpg';
+import imageNico from '../../img/Nicolas.jpg';
 
 const aboutUs = () => {
   renderAboutUsPage();
@@ -10,7 +10,6 @@ const aboutUs = () => {
 };
 
 function renderAboutUsPage() {
-
   const main = document.querySelector('main');
   main.innerHTML = `
   <div class = "box2">
@@ -116,18 +115,15 @@ function renderAboutUsPage() {
   </div>
   </div>
   </div>`;
-
-};
+}
 
 function addDialogEventListener() {
-
   const showStory = document.querySelectorAll('#showStory');
   const Story = document.querySelectorAll('#Story');
 
-  for (let i = 0; i < showStory.length; i+=1) {
+  for (let i = 0; i < showStory.length; i += 1) {
     showStory[i].addEventListener('click', () => Story[i].showModal());
   }
-
 }
 
 export default aboutUs;

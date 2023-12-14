@@ -3,151 +3,136 @@ import imageLogo from '../../img/logo-site.png';
 import { getOneQuizzContent } from '../../utils/quizzesQueries';
 import getPathParameters from '../../utils/path-href';
 import Navigate from '../Router/Navigate';
-import {getQuizzCategoryData} from '../../utils/quizzesData';
+import { getQuizzCategoryData } from '../../utils/quizzesData';
 import { ResultQuizzPage } from './ResultQuizzPage';
-import { chooseDifficultyName } from '../../utils/difficultyData';  
-import { createParticipation, getParticipation, updateParticipation } from '../../utils/participationsQueries';
+import { chooseDifficultyName } from '../../utils/difficultyData';
+import {
+  createParticipation,
+  getParticipation,
+  updateParticipation,
+} from '../../utils/participationsQueries';
 import { getAuthenticatedUser } from '../../utils/auths';
 import { getUserFromUsername, updateUserPoints } from '../../utils/usersQueries';
 
 const countMaxAttempts = 3;
 
-async function QuestionnairePage () {
+async function QuestionnairePage() {
+  const parametersObject = getPathParameters();
+  let { quizzId } = parametersObject;
 
-    const parametersObject = getPathParameters();
-    let {quizzId} = parametersObject;
+  if (quizzId === undefined || Number.isNaN(Number(quizzId))) {
+    return Navigate(process.env.PATH_PREFIX);
+  }
 
-    if ( quizzId === undefined || Number.isNaN(Number(quizzId))) {
+  quizzId = Number(quizzId);
 
-        return Navigate(process.env.PATH_PREFIX);
+  const quizz = await getOneQuizzContent(quizzId);
 
-    };
+  if (!quizz) {
+    const main = document.querySelector('main');
+    main.innerHTML = `<h1>Oops! Something went wrong...</h1>`;
+    return false;
+  }
 
-    quizzId = Number(quizzId);
+  const sessionUserId = sessionStorage.getItem('userId');
 
-    const quizz = await getOneQuizzContent(quizzId);
+  let participationFound = null;
+  let userId = -1;
 
-    if ( !quizz ) {
-        const main = document.querySelector('main');
-        main.innerHTML = `<h1>Oops! Something went wrong...</h1>`;
-        return false;
-    };
+  if (sessionUserId === null || Number(sessionUserId) === -1) {
+    const authenticatedUser = getAuthenticatedUser();
 
-    const sessionUserId = sessionStorage.getItem('userId');
+    const isAuthenticated = authenticatedUser !== undefined;
 
-    let participationFound = null;
-    let userId = -1;
+    if (isAuthenticated) {
+      const { username } = authenticatedUser;
+      const userFound = await getUserFromUsername(username);
+      userId = userFound.id_user;
 
-    if ( sessionUserId === null || Number(sessionUserId) === -1 ) {
-
-        const authenticatedUser = getAuthenticatedUser();
-
-        const isAuthenticated = authenticatedUser !== undefined;
-
-        if ( isAuthenticated ) {
-
-            const {username} = authenticatedUser;
-            const userFound = await getUserFromUsername(username);
-            userId = userFound.id_user;
-
-            participationFound = await getParticipation( userId, quizzId );
-
-        };
-
+      participationFound = await getParticipation(userId, quizzId);
     }
+  }
 
-    if ( participationFound !== null ) {
+  if (participationFound !== null) {
+    const countAttempts = participationFound.nbr_tentatives;
 
-        const countAttempts = participationFound.nbr_tentatives;
+    if (countAttempts === countMaxAttempts) {
+      return Navigate('/');
+    }
+  }
 
-        if ( countAttempts === countMaxAttempts ) {
+  const sessionQuizzId = Number(sessionStorage.getItem('quizzId'));
 
-            return Navigate('/');
+  const { name: categoryName, image: categoryImage } = getQuizzCategoryData(quizz.categorie);
 
-        };
+  if (sessionQuizzId !== quizzId) {
+    // eslint-disable-next-line no-console
+    console.log(`initialized !`);
 
-    };
+    const randomQuestionsOrderArray = randomQuestionsOrder(quizz);
+    const difficultyName = chooseDifficultyName(quizz.difficultee);
+    const pointsRapportes = quizz.points_rapportes;
+    const numberOfQuestions = randomQuestionsOrderArray.length;
 
-    const sessionQuizzId = Number( sessionStorage.getItem('quizzId') );
+    initializeSessionData(
+      quizzId,
+      randomQuestionsOrderArray,
+      categoryName,
+      difficultyName,
+      pointsRapportes,
+      numberOfQuestions,
+      participationFound,
+      userId,
+    );
+  }
 
-    const {
+  const questions = JSON.parse(sessionStorage.getItem('questions'));
+  const sessionCurrentIndex = Number(sessionStorage.getItem('currentIndexQuestion'));
+  const countRightAnswers = Number(sessionStorage.getItem('countRightAnswers'));
 
-        name : categoryName,
-        image : categoryImage,
+  renderQuestionnaire(questions, sessionCurrentIndex, categoryName, categoryImage);
 
-    } = getQuizzCategoryData(quizz.categorie);
+  if (sessionCurrentIndex === questions.length - 1) {
+    addEndQuizzButton();
+  } else {
+    addNextQuestionButton();
+  }
 
-    if ( sessionQuizzId !== quizzId ) {
+  const maxCountQuestions = questions.length;
+  addCounterQuestions(sessionCurrentIndex, maxCountQuestions);
+  addCounterRightAnswers(countRightAnswers);
 
-        // eslint-disable-next-line no-console
-        console.log( `initialized !` );
+  addPropositionsListeners();
 
-        const randomQuestionsOrderArray = randomQuestionsOrder(quizz);
-        const difficultyName = chooseDifficultyName( quizz.difficultee );
-        const pointsRapportes = quizz.points_rapportes;
-        const numberOfQuestions = randomQuestionsOrderArray.length;
-
-        initializeSessionData( quizzId, randomQuestionsOrderArray, categoryName, difficultyName, pointsRapportes, numberOfQuestions, participationFound, userId );
-
-    };
-
-    const questions = JSON.parse( sessionStorage.getItem('questions') );
-    const sessionCurrentIndex = Number( sessionStorage.getItem('currentIndexQuestion') );
-    const countRightAnswers = Number( sessionStorage.getItem('countRightAnswers') );
-
-    renderQuestionnaire(questions, sessionCurrentIndex, categoryName, categoryImage);
-
-    if ( sessionCurrentIndex === questions.length - 1 ) {
-
-        addEndQuizzButton();
-
-    } else {
-
-        addNextQuestionButton();
-
-    };
-
-    const maxCountQuestions = questions.length;
-    addCounterQuestions( sessionCurrentIndex, maxCountQuestions );
-    addCounterRightAnswers( countRightAnswers );
-
-    addPropositionsListeners();
-
-    return true;
-    
-};
+  return true;
+}
 
 function randomQuestionsOrder(quizz) {
+  const { questions } = quizz;
 
-    const {questions} = quizz;
+  const randomQuestionsOrderArray = [];
 
-    const randomQuestionsOrderArray = [];
+  while (questions.length > 0) {
+    const randomIndex = Math.floor(Math.random() * questions.length);
 
-    while ( questions.length > 0 ) {
+    const randomQuestion = questions[randomIndex];
 
-        const randomIndex = Math.floor( Math.random() * questions.length );
+    questions.splice(randomIndex, 1);
 
-        const randomQuestion = questions[randomIndex];
+    randomQuestionsOrderArray.push(randomQuestion);
+  }
 
-        questions.splice(randomIndex, 1);
+  return randomQuestionsOrderArray;
+}
 
-        randomQuestionsOrderArray.push( randomQuestion );
+function renderQuestionnaire(questions, indexQuestion, categoryName, categoryImage) {
+  const question = questions[indexQuestion];
+  const intituleQuestion = question.intitule;
 
-    };
+  const propositionsQuestion = question.propositions;
 
-    return randomQuestionsOrderArray;
-
-};
-
-function renderQuestionnaire (questions, indexQuestion, categoryName, categoryImage) {
-
-    const question = questions[indexQuestion];
-    const intituleQuestion = question.intitule;
-
-    const propositionsQuestion = question.propositions;
-
-    const main = document.querySelector('main');
-    main.innerHTML = `
+  const main = document.querySelector('main');
+  main.innerHTML = `
         <div class="glass-container-pageQuestion" style="url(${categoryImage})">
             <div class="card-pageQuestion">
             <div class="card-header">
@@ -160,338 +145,284 @@ function renderQuestionnaire (questions, indexQuestion, categoryName, categoryIm
                     ${intituleQuestion}
                 </span>
                 <div class="card-body propositions">
-                    ${propositionsQuestion.map( proposition => `<a class="btn proposition-element" data-is-selected="false">${proposition.intitule}</a>` ).join("")}
+                    ${propositionsQuestion
+                      .map(
+                        (proposition) =>
+                          `<a class="btn proposition-element" data-is-selected="false">${proposition.intitule}</a>`,
+                      )
+                      .join('')}
                 </div>
                 <div id="endQuizzButtonWrapper"></div>
                 <div id="nextQuestionButtonWrapper"></div>
             </div>
         </div>
     `;
+}
 
-};
+function addCounterQuestions(currentIndexQuestion, maxCountQuestions) {
+  const counterQuestionsWrapper = document.querySelector('#counterQuestionsWrapper');
 
-function addCounterQuestions ( currentIndexQuestion, maxCountQuestions ) {
-    
-    const counterQuestionsWrapper = document.querySelector('#counterQuestionsWrapper');
-
-    counterQuestionsWrapper.innerHTML += `
+  counterQuestionsWrapper.innerHTML += `
         <div class="div-counter-questions-pageQuestion">
-            <p>Question n°${currentIndexQuestion+1} / ${maxCountQuestions}</p>
+            <p>Question n°${currentIndexQuestion + 1} / ${maxCountQuestions}</p>
         </div>
     `;
+}
 
-};
+function addCounterRightAnswers(countRightAnswers) {
+  const countRightAnswersWrapper = document.querySelector('#countRightAnswersWrapper');
 
-function addCounterRightAnswers ( countRightAnswers ) {
-    
-    const countRightAnswersWrapper = document.querySelector('#countRightAnswersWrapper');
-
-    countRightAnswersWrapper.innerHTML += `
+  countRightAnswersWrapper.innerHTML += `
         <div class="div-count-right-answers-pageQuestion">
             <p>${countRightAnswers} bonne(s) réponse(s)</p>
         </div>
     `;
-
-};
+}
 
 function addNextQuestionButton() {
+  const nextQuestionButtonWrapper = document.querySelector('#nextQuestionButtonWrapper');
 
-    const nextQuestionButtonWrapper = document.querySelector('#nextQuestionButtonWrapper');
-
-    nextQuestionButtonWrapper.innerHTML += `
+  nextQuestionButtonWrapper.innerHTML += `
         <button class="QuizzPage-default-style-button" id="nextQuestionButton">
             Question suivante
         </button>
     `;
-
-};
+}
 
 function onNextQuestionButton() {
+  const sessionCurrentIndex = Number(sessionStorage.getItem('currentIndexQuestion'));
 
-    const sessionCurrentIndex = Number( sessionStorage.getItem('currentIndexQuestion') );
+  const buttonNextQuestion = document.querySelector('#nextQuestionButton');
 
-    const buttonNextQuestion = document.querySelector('#nextQuestionButton');
+  sessionStorage.setItem('currentIndexQuestion', sessionCurrentIndex + 1);
 
-    sessionStorage.setItem('currentIndexQuestion', sessionCurrentIndex + 1 );
+  buttonNextQuestion.removeEventListener('click', onNextQuestionButton);
 
-    buttonNextQuestion.removeEventListener('click', onNextQuestionButton );
+  QuestionnairePage();
+}
 
-    QuestionnairePage();
+function checkAnswer(sessionCurrentIndex) {
+  const questions = JSON.parse(sessionStorage.getItem('questions'));
 
-};
+  const { propositions } = questions[sessionCurrentIndex];
 
-function checkAnswer( sessionCurrentIndex ) {
+  removePropositionsListeners();
 
-    const questions = JSON.parse( sessionStorage.getItem('questions') );
+  checkIsReponsePropositions(propositions);
 
-    const {propositions} = questions[sessionCurrentIndex];
+  let propositionSelected = getPropositionSelected();
 
-    removePropositionsListeners();
+  propositionSelected = checkSelectedProposition(propositionSelected);
 
-    checkIsReponsePropositions( propositions );
+  if (propositionSelected.isreponse) {
+    const countRightAnswers = Number(sessionStorage.getItem('countRightAnswers'));
 
-    let propositionSelected = getPropositionSelected();
-
-    propositionSelected = checkSelectedProposition( propositionSelected );
-
-    if ( propositionSelected.isreponse ) {
-
-        const countRightAnswers = Number( sessionStorage.getItem('countRightAnswers') );
-
-        sessionStorage.setItem('countRightAnswers', countRightAnswers+1);
-
-    };
-
+    sessionStorage.setItem('countRightAnswers', countRightAnswers + 1);
+  }
 }
 
 function getPropositionSelected() {
+  const propositionsElements = document.querySelectorAll('.proposition-element');
 
-    const propositionsElements = document.querySelectorAll('.proposition-element');
+  let propositionSelected = null;
 
-    let propositionSelected = null;
+  propositionsElements.forEach((propositionElement) => {
+    if (propositionElement.dataset.isSelected === 'true') {
+      propositionSelected = {
+        intitule: propositionElement.innerText,
+      };
+    }
+  });
 
-    propositionsElements.forEach( propositionElement => {
+  return propositionSelected;
+}
 
-        if ( propositionElement.dataset.isSelected === 'true' ) {
+function checkSelectedProposition(propositionSelected) {
+  const propositionsElements = document.querySelectorAll('.proposition-element');
 
-            propositionSelected = {
-                intitule : propositionElement.innerText,
-            };
+  propositionsElements.forEach((propositionElement) => {
+    if (propositionSelected.intitule === propositionElement.innerText) {
+      const booleanString = propositionElement.dataset.isReponse;
+      propositionSelected.isreponse = JSON.parse(booleanString);
+    }
+  });
 
-        };
+  return propositionSelected;
+}
 
-    });
+function checkIsReponsePropositions(propositions) {
+  const propositionsElements = document.querySelectorAll('.proposition-element');
 
-    return propositionSelected;
+  propositionsElements.forEach((propositionElement) => {
+    const isReponse = propositions.find((p) => p.intitule === propositionElement.innerText)
+      .isreponse;
 
-};
-
-function checkSelectedProposition ( propositionSelected ) {
-
-    const propositionsElements = document.querySelectorAll('.proposition-element');
-
-    propositionsElements.forEach( propositionElement => {
-
-        if ( propositionSelected.intitule === propositionElement.innerText ) {
-
-            const booleanString = propositionElement.dataset.isReponse;
-            propositionSelected.isreponse = JSON.parse(booleanString);
-
-        };
-
-    });
-
-    return propositionSelected;
-
-};
-
-function checkIsReponsePropositions ( propositions ) {
-
-    const propositionsElements = document.querySelectorAll('.proposition-element');
-
-    propositionsElements.forEach( propositionElement => {
-
-        const isReponse = propositions.find( p => p.intitule === propositionElement.innerText ).isreponse;
-
-        if ( isReponse ) {
-
-            propositionElement.dataset.isReponse = 'true';
-            propositionElement.style.backgroundColor = '#4CBB17';
-
-        } else {
-
-            propositionElement.dataset.isReponse = 'false';
-            propositionElement.style.backgroundColor = '#D2042D';
-
-        };
-
-    });
-
-};
+    if (isReponse) {
+      propositionElement.dataset.isReponse = 'true';
+      propositionElement.style.backgroundColor = '#4CBB17';
+    } else {
+      propositionElement.dataset.isReponse = 'false';
+      propositionElement.style.backgroundColor = '#D2042D';
+    }
+  });
+}
 
 function addEndQuizzButton() {
+  const endQuizzButtonWrapper = document.querySelector('#endQuizzButtonWrapper');
 
-    const endQuizzButtonWrapper = document.querySelector('#endQuizzButtonWrapper');
-
-    endQuizzButtonWrapper.innerHTML += `
+  endQuizzButtonWrapper.innerHTML += `
         <button class="QuizzPage-default-style-button" id="endQuizzButton">
             Terminer le quizz
         </button>
     `;
-
-};
+}
 
 function addEndQuizzButtonListener() {
+  const classStyleame = 'QuizzPage-set-style-button';
+  const button = document.querySelector('#endQuizzButton');
 
-    const classStyleame = 'QuizzPage-set-style-button';
-    const button = document.querySelector('#endQuizzButton');
+  button.className = classStyleame;
 
-    button.className = classStyleame;
+  button.addEventListener('click', async () => {
+    const category = sessionStorage.getItem('category');
+    const difficulty = sessionStorage.getItem('difficulty');
+    const pointsRapportes = Number(sessionStorage.getItem('pointsRapportes'));
+    const countRightAnswers = Number(sessionStorage.getItem('countRightAnswers'));
+    const numberOfQuestions = Number(sessionStorage.getItem('numberOfQuestions'));
 
-    button.addEventListener('click', async () => {
+    const pointsTotauxRapportes = pointsRapportes * countRightAnswers;
 
-        const category = sessionStorage.getItem('category');
-        const difficulty = sessionStorage.getItem('difficulty');
-        const pointsRapportes = Number( sessionStorage.getItem('pointsRapportes') );
-        const countRightAnswers = Number( sessionStorage.getItem('countRightAnswers') );
-        const numberOfQuestions = Number( sessionStorage.getItem('numberOfQuestions') );
+    const percentageQuestionsSucceeded = (countRightAnswers / numberOfQuestions) * 100;
 
-        const pointsTotauxRapportes = pointsRapportes * countRightAnswers;
+    const userId = Number(sessionStorage.getItem('userId'));
+    const quizzId = Number(sessionStorage.getItem('quizzId'));
 
-        const percentageQuestionsSucceeded = (countRightAnswers / numberOfQuestions) * 100;
+    await saveParticipationForQuizz(userId, quizzId);
 
-        const userId = Number( sessionStorage.getItem('userId') );
-        const quizzId = Number( sessionStorage.getItem('quizzId') );
+    ResultQuizzPage(category, difficulty, pointsTotauxRapportes, percentageQuestionsSucceeded);
 
-        await saveParticipationForQuizz( userId, quizzId );
-
-        ResultQuizzPage( category, difficulty, pointsTotauxRapportes, percentageQuestionsSucceeded );
-
-        return true;
-
-    });
-
-};
+    return true;
+  });
+}
 
 function addNextQuestionButtonListener() {
+  const classStyleame = 'QuizzPage-set-style-button';
 
-    const classStyleame = 'QuizzPage-set-style-button';
+  const button = document.querySelector('#nextQuestionButton');
 
-    const button = document.querySelector('#nextQuestionButton');
+  button.className = classStyleame;
 
-    button.className = classStyleame;
+  button.addEventListener('click', onNextQuestionButton);
+}
 
-    button.addEventListener('click', onNextQuestionButton );
+async function saveParticipationForQuizz(userId, quizzId) {
+  // Pas connecté
+  if (userId === -1) return;
 
-};
+  const participation = await getParticipation(userId, quizzId);
 
-async function saveParticipationForQuizz( userId, quizzId ) {
+  const countRightAnswers = Number(sessionStorage.getItem('countRightAnswers'));
+  const pointsRapportes = Number(sessionStorage.getItem('pointsRapportes'));
 
-    // Pas connecté
-    if ( userId === -1 ) return;
+  const nouveauNombrePointsRapportes = countRightAnswers * pointsRapportes;
 
-    const participation = await getParticipation( userId, quizzId );
+  // Pas de participation
 
-    const countRightAnswers = Number( sessionStorage.getItem('countRightAnswers') );
-    const pointsRapportes = Number( sessionStorage.getItem('pointsRapportes') );
+  if (participation === null) {
+    await createParticipation(userId, quizzId, countRightAnswers);
+    await updateUserPoints(userId, nouveauNombrePointsRapportes);
+  }
+  // Déjà une participation
+  else {
+    const oldCountRightAnswers = participation.nbr_questions_reussies;
 
-    const nouveauNombrePointsRapportes = countRightAnswers * pointsRapportes;
+    const ancienNombrePointsRapportes = oldCountRightAnswers * pointsRapportes;
 
-    // Pas de participation
+    // Meilleur score
+    if (ancienNombrePointsRapportes < nouveauNombrePointsRapportes) {
+      await updateParticipation(userId, quizzId, countRightAnswers);
+      await updateUserPoints(userId, nouveauNombrePointsRapportes - ancienNombrePointsRapportes);
+    } else {
+      // Moins bon ou même score
 
-    if ( participation === null ) {
-
-        await createParticipation( userId, quizzId, countRightAnswers );
-        await updateUserPoints(userId, nouveauNombrePointsRapportes );
-
-    } 
-    // Déjà une participation
-    else {
-
-        const oldCountRightAnswers = participation.nbr_questions_reussies;
-        
-        const ancienNombrePointsRapportes = oldCountRightAnswers * pointsRapportes;
-
-        // Meilleur score
-        if ( ancienNombrePointsRapportes < nouveauNombrePointsRapportes ) {
-
-            await updateParticipation( userId, quizzId, countRightAnswers );
-            await updateUserPoints(userId, (nouveauNombrePointsRapportes-ancienNombrePointsRapportes));
-
-        } else {
-
-            // Moins bon ou même score
-
-            await updateParticipation( userId, quizzId, oldCountRightAnswers );
-
-        }
-
+      await updateParticipation(userId, quizzId, oldCountRightAnswers);
     }
-
+  }
 }
 
 function removePropositionsListeners() {
+  const propositions = document.querySelectorAll('.proposition-element');
 
-    const propositions = document.querySelectorAll('.proposition-element');
+  propositions.forEach((proposition) => {
+    proposition.removeEventListener('click', onPropositionClick);
+  });
+}
 
-    propositions.forEach( proposition => {
+function addPropositionsListeners() {
+  const propositions = document.querySelectorAll('.proposition-element');
 
-        proposition.removeEventListener('click', onPropositionClick );
-
-    });
-
-};
-
-function addPropositionsListeners () {
-
-    const propositions = document.querySelectorAll('.proposition-element');
-
-    propositions.forEach( proposition => {
-
-        proposition.addEventListener('click', onPropositionClick );
-
-    });
-
-};
+  propositions.forEach((proposition) => {
+    proposition.addEventListener('click', onPropositionClick);
+  });
+}
 
 async function onPropositionClick(event) {
+  const propositions = document.querySelectorAll('.proposition-element');
 
-    const propositions = document.querySelectorAll('.proposition-element');
+  for (let i = 0; i < propositions.length; i += 1) {
+    propositions[i].dataset.isSelected = 'false';
+    propositions[i].style.border = 'none';
+  }
 
-    for ( let i=0; i<propositions.length; i+=1 ) {
+  const proposition = event.target;
 
-        propositions[i].dataset.isSelected = 'false';
-        propositions[i].style.border = 'none';
+  proposition.dataset.isSelected = 'true';
+  proposition.style.border = '2px solid #FAF9F6';
+  proposition.style.boxShadow = '2px 2px 10px #FAF9F6';
 
-    };
+  const questions = JSON.parse(sessionStorage.getItem('questions'));
+  const sessionCurrentIndex = Number(sessionStorage.getItem('currentIndexQuestion'));
 
-    const proposition = event.target;
+  checkAnswer(sessionCurrentIndex);
 
-    proposition.dataset.isSelected = 'true';
-    proposition.style.border = '2px solid #FAF9F6';
-    proposition.style.boxShadow = '2px 2px 10px #FAF9F6';
+  if (sessionCurrentIndex === questions.length - 1) {
+    addEndQuizzButtonListener();
+  } else {
+    addNextQuestionButtonListener();
+  }
 
-    const questions = JSON.parse( sessionStorage.getItem('questions') );
-    const sessionCurrentIndex = Number( sessionStorage.getItem('currentIndexQuestion') );
+  return true;
+}
 
-    checkAnswer( sessionCurrentIndex );
+function initializeSessionData(
+  currentQuizzId,
+  quizzQuestions,
+  quizzCategory,
+  quizzDifficulty,
+  pointsRapportes,
+  numberOfQuestions,
+  participation,
+  userId,
+) {
+  sessionStorage.setItem('quizzId', currentQuizzId);
 
-    if ( sessionCurrentIndex === questions.length - 1 ) {
+  sessionStorage.setItem('category', quizzCategory);
 
-        addEndQuizzButtonListener();
+  sessionStorage.setItem('difficulty', quizzDifficulty);
 
-    } else {
+  sessionStorage.setItem('questions', JSON.stringify(quizzQuestions));
 
-        addNextQuestionButtonListener();
+  sessionStorage.setItem('currentIndexQuestion', 0);
 
-    };
+  sessionStorage.setItem('countRightAnswers', 0);
 
-    return true;
+  sessionStorage.setItem('pointsRapportes', pointsRapportes);
 
-};
+  sessionStorage.setItem('numberOfQuestions', numberOfQuestions);
 
-function initializeSessionData ( currentQuizzId, quizzQuestions, quizzCategory, quizzDifficulty, pointsRapportes, numberOfQuestions, participation, userId ) {
+  sessionStorage.setItem('participation', JSON.stringify(participation));
 
-    sessionStorage.setItem('quizzId', currentQuizzId );
-
-    sessionStorage.setItem('category', quizzCategory );
-
-    sessionStorage.setItem('difficulty', quizzDifficulty );
-
-    sessionStorage.setItem('questions', JSON.stringify(quizzQuestions) );
-
-    sessionStorage.setItem('currentIndexQuestion', 0 );
-
-    sessionStorage.setItem('countRightAnswers', 0 );
-
-    sessionStorage.setItem('pointsRapportes', pointsRapportes );
-
-    sessionStorage.setItem('numberOfQuestions', numberOfQuestions );
-
-    sessionStorage.setItem('participation', JSON.stringify(participation) );
-
-    sessionStorage.setItem('userId', userId );
-
-};
+  sessionStorage.setItem('userId', userId);
+}
 
 export default QuestionnairePage;

@@ -1,20 +1,16 @@
-import quizzlerLogo from "../../img/logo-site.png";
+import quizzlerLogo from '../../img/logo-site.png';
 import { setAuthenticatedUser } from '../../utils/auths';
 import Navbar from '../Navbar/Navbar';
 import Navigate from '../Router/Navigate';
 import { loginUser } from '../../utils/authsQueries';
 
 const LoginPage = () => {
-
-    renderLoginPage();
-
+  renderLoginPage();
 };
 
 function renderLoginPage() {
-
-    const main = document.querySelector('main');
-    main.innerHTML = 
-    `
+  const main = document.querySelector('main');
+  main.innerHTML = `
     <div class="container-login">
         <div class="left-container">
             <div class="center-content">
@@ -43,26 +39,25 @@ function renderLoginPage() {
         </div>
     </div>
 
-    `
-    const submitButton = document.querySelector("#loginForm");
-    submitButton.addEventListener('submit', onLogin);
-
+    `;
+  const submitButton = document.querySelector('#loginForm');
+  submitButton.addEventListener('submit', onLogin);
 }
 
 async function onLogin(e) {
-    e.preventDefault();
+  e.preventDefault();
 
-    const username = document.querySelector('#username').value;
-    const password = document.querySelector('#password').value;
+  const username = document.querySelector('#username').value;
+  const password = document.querySelector('#password').value;
 
-    const authenticatedUser = await loginUser( username, password );
+  const authenticatedUser = await loginUser(username, password);
 
-    setAuthenticatedUser(authenticatedUser);
-    Navbar();
+  setAuthenticatedUser(authenticatedUser);
+  Navbar();
 
-    Navigate('/');
+  Navigate('/');
 
-    return true;
+  return true;
 }
 
-  export default LoginPage;
+export default LoginPage;

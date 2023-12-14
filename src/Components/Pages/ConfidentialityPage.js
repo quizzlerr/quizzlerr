@@ -1,14 +1,13 @@
 const Confidentialité = () => {
-    const siteUrl = 'https://quizzlerr.github.io/quizzlerr/';
-    renderConfidentialityPage(siteUrl);
-}
+  const siteUrl = 'https://quizzlerr.github.io/quizzlerr/';
+  renderConfidentialityPage(siteUrl);
+};
 
 function renderConfidentialityPage(siteUrl) {
+  const updateDate = '14 décembre 2023';
 
-    const updateDate = '14 décembre 2023';
-
-    const main = document.querySelector('main');
-    main.innerHTML = `
+  const main = document.querySelector('main');
+  main.innerHTML = `
     <div id="inner_content-7-239">
     <div style="height:50px"></div>
     <p><span style="text-decoration: underline;">Date de mise à jour : ${updateDate}</span></p>
@@ -58,7 +57,6 @@ function renderConfidentialityPage(siteUrl) {
     <div style="height:50px"></div>
     <p>Vous pouvez à n'importe quel moment décider de supprimer votre compte</p>
     <div style="height:50px"></div>`;
-
 }
 
 export default Confidentialité;

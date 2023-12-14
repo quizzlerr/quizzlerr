@@ -1,8 +1,11 @@
 import Navbar from '../Navbar/Navbar';
 import Navigate from '../Router/Navigate';
-import { deleteInParticipationById, getUserFromUsername, deleteInUsersById } from '../../utils/usersQueries';
+import {
+  deleteInParticipationById,
+  getUserFromUsername,
+  deleteInUsersById,
+} from '../../utils/usersQueries';
 import { getAuthenticatedUser, clearAuthenticatedUser } from '../../utils/auths';
-
 
 const DeleteUser = () => {
   DeleteUserM();

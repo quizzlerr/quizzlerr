@@ -1,4 +1,4 @@
-import quizzlerLogo from "../../img/logo-site.png";
+import quizzlerLogo from '../../img/logo-site.png';
 import { setAuthenticatedUser } from '../../utils/auths';
 import { clearPage, renderPageTitle } from '../../utils/render';
 import Navbar from '../Navbar/Navbar';
@@ -6,17 +6,15 @@ import Navigate from '../Router/Navigate';
 import { registerUser } from '../../utils/authsQueries';
 
 const RegisterPage = () => {
-    clearPage();
-    renderPageTitle('Register');
-    renderRegisterPage();
-    addListenerToConfidentialityText();
+  clearPage();
+  renderPageTitle('Register');
+  renderRegisterPage();
+  addListenerToConfidentialityText();
 };
 
 function renderRegisterPage() {
-
-    const main = document.querySelector('main');
-    main.innerHTML = 
-    `
+  const main = document.querySelector('main');
+  main.innerHTML = `
     <div class="container-register">
         <div class="left-container">
             <div class="center-content">
@@ -59,52 +57,49 @@ function renderRegisterPage() {
         </div>
     </div>`;
 
-    const submitButton = document.querySelector("#registerForm");
-    submitButton.addEventListener('submit', onRegister);
-
-};
+  const submitButton = document.querySelector('#registerForm');
+  submitButton.addEventListener('submit', onRegister);
+}
 
 function addListenerToConfidentialityText() {
+  const text = document.querySelector('#href-confidentiality');
 
-    const text = document.querySelector('#href-confidentiality');
+  text.style.cursor = 'pointer';
+  text.style.textDecoration = 'underline';
 
-    text.style.cursor = 'pointer';
-    text.style.textDecoration = 'underline';
-
-    text.addEventListener('click', (e) => { onConfidentialityText(e) });
-
+  text.addEventListener('click', (e) => {
+    onConfidentialityText(e);
+  });
 }
 function onConfidentialityText(e) {
+  e.preventDefault();
 
-    e.preventDefault();
+  Navigate(`${process.env.PATH_PREFIX}confidentiality`);
 
-    Navigate(`${process.env.PATH_PREFIX}confidentiality`);
-
-    return true;
-
+  return true;
 }
 
 async function onRegister(e) {
-    e.preventDefault();
+  e.preventDefault();
 
-    const email = document.querySelector('#registerEmail').value;
-    const password = document.querySelector('#registerPassword').value;
-    const confPassword = document.querySelector('#registerConfPassword').value;
-    const username = document.querySelector('#registerUsername').value;
+  const email = document.querySelector('#registerEmail').value;
+  const password = document.querySelector('#registerPassword').value;
+  const confPassword = document.querySelector('#registerConfPassword').value;
+  const username = document.querySelector('#registerUsername').value;
 
-    if (password !== confPassword) {
-        throw new Error ("Passwords do not match");
-    };
+  if (password !== confPassword) {
+    throw new Error('Passwords do not match');
+  }
 
-    const authenticatedUser = await registerUser( email, username, password );
+  const authenticatedUser = await registerUser(email, username, password);
 
-    setAuthenticatedUser(authenticatedUser);
-        
-    Navbar();
+  setAuthenticatedUser(authenticatedUser);
 
-    Navigate('/');
+  Navbar();
 
-    return true;
+  Navigate('/');
+
+  return true;
 }
 
-  export default RegisterPage;
+export default RegisterPage;
