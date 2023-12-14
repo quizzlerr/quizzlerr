@@ -9,6 +9,7 @@ const RegisterPage = () => {
     clearPage();
     renderPageTitle('Register');
     renderRegisterPage();
+    addListenerToConfidentialityText();
 };
 
 function renderRegisterPage() {
@@ -46,7 +47,7 @@ function renderRegisterPage() {
                     <div class="form-group">
                         <p>
                             En vous inscrivant, vous acceptez<br>
-                            nos <a href="${process.env.PATH_PREFIX}confidentiality">conditions générales d'utilisation</a>
+                            nos <a id="href-confidentiality">conditions générales d'utilisation</a>
                         </p>
                     </div>
                     <div class="form-group">
@@ -62,6 +63,26 @@ function renderRegisterPage() {
     submitButton.addEventListener('submit', onRegister);
 
 };
+
+function addListenerToConfidentialityText() {
+
+    const text = document.querySelector('#href-confidentiality');
+
+    text.style.cursor = 'pointer';
+    text.style.textDecoration = 'underline';
+
+    text.addEventListener('click', (e) => { onConfidentialityText(e) });
+
+}
+function onConfidentialityText(e) {
+
+    e.preventDefault();
+
+    Navigate(`${process.env.PATH_PREFIX}confidentiality`);
+
+    return true;
+
+}
 
 async function onRegister(e) {
     e.preventDefault();
