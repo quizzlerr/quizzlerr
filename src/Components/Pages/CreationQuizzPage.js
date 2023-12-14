@@ -153,8 +153,6 @@ async function onAddQuestionQuizz(e) {
     
     const lastIdQuestion = await getLastQuestionId();
 
-    console.log(lastIdQuestion);
-
     const proposition1IsReponse = proposition1 === reponseQuestion;
     const proposition2IsReponse = proposition2 === reponseQuestion;
     const proposition3IsReponse = proposition3 === reponseQuestion;
@@ -222,6 +220,5 @@ function initializeSessionData(currentQuizzId) {
   sessionStorage.setItem('compteurQuestion', 1);
   sessionStorage.setItem('currentStepCreation', 1);
 }
-
 
 export default creationQuizz;

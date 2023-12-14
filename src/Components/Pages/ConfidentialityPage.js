@@ -1,10 +1,17 @@
 const Confidentialité = () => {
-    const siteUrl = 'https://lukenv.github.io/quizzler/';
+    const siteUrl = 'https://quizzlerr.github.io/quizzlerr/';
+    renderConfidentialityPage(siteUrl);
+}
+
+function renderConfidentialityPage(siteUrl) {
+
+    const updateDate = '14 décembre 2023';
+
     const main = document.querySelector('main');
     main.innerHTML = `
     <div id="inner_content-7-239">
     <div style="height:50px"></div>
-    <p><span style="text-decoration: underline;">Date de mise à jour : 9 décembre 2023</span></p>
+    <p><span style="text-decoration: underline;">Date de mise à jour : ${updateDate}</span></p>
     <div style="height:50px"></div>
     <p><strong>Accès rapide :</strong></p>
     <div style="height:25px"></div>
