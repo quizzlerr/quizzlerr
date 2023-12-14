@@ -67,8 +67,9 @@ function animateGridElements() {
 function renderLoadingMessage() {
 
   const main = document.querySelector('main');
+  const html = document.querySelector('html');
 
-  main.style.cursor = 'wait';
+  html.style.cursor = 'wait';
 
   main.innerHTML = createTitle('Loading quizzes...', 'h1');
 
@@ -77,7 +78,8 @@ function renderLoadingMessage() {
 function generateQuizzesButtons(quizzesParticipationsArray, quizzDataImages, quizzCategoryName) {
   const main = document.querySelector('main');
 
-  main.style.cursor = 'default';
+  const html = document.querySelector('html');
+  html.style.cursor = 'default';
   
   const categoryTitle = createTitle(quizzCategoryName, 'h1');
 
