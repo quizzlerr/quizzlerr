@@ -13,7 +13,7 @@ const creationQuizz = () => {
   }
 
    if (!isAdmin()) {
-    return Navigate(process.env.PATH_PREFIX);
+    return Navigate('/');
   }  
 
   let currentStepCreation = sessionStorage.getItem('currentStepCreation');
