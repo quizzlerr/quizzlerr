@@ -78,7 +78,7 @@ const RegisterPage = () => {
       
     Navbar();
 
-    return Navigate('/');
+    return Navigate(process.env.PATH_PREFIX);
 }
 
   export default RegisterPage;
