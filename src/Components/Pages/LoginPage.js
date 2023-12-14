@@ -52,7 +52,7 @@ const LoginPage = () => {
     setAuthenticatedUser(authenticatedUser);
     Navbar();
   
-    Navigate(process.env.PATH_PREFIX);
+    Navigate('/');
   }
 
   export default LoginPage;
