@@ -18,6 +18,8 @@ async function viewQuizzes(categorieName) {
 
   clearPage();
 
+  renderLoadingMessage();
+
   const authenticatedUser = getAuthenticatedUser();
   const defaultUserId = -1;
   let userId;
@@ -40,6 +42,8 @@ async function viewQuizzes(categorieName) {
 
   const quizzesParticipations = await loadQuizzes(category, userId);
 
+  clearPage();
+
   generateQuizzesButtons(quizzesParticipations, quizzDataImages, quizzDataCategoryName, userId);
 
   for (let i = 0; i < 3; i += 1) {
@@ -60,9 +64,21 @@ function animateGridElements() {
   });
 }
 
+function renderLoadingMessage() {
+
+  const main = document.querySelector('main');
+
+  main.style.cursor = 'wait';
+
+  main.innerHTML = createTitle('Loading quizzes...', 'h1');
+
+};
+
 function generateQuizzesButtons(quizzesParticipationsArray, quizzDataImages, quizzCategoryName) {
   const main = document.querySelector('main');
 
+  main.style.cursor = 'default';
+  
   const categoryTitle = createTitle(quizzCategoryName, 'h1');
 
   main.innerHTML += categoryTitle;
