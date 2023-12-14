@@ -5,6 +5,12 @@ import imageKeyvan from "../../img/Keyvan.jpg";
 import imageNico from "../../img/Nicolas.jpg";
 
 const aboutUs = () => {
+  renderAboutUsPage();
+  addDialogEventListener();
+};
+
+function renderAboutUsPage() {
+
   const main = document.querySelector('main');
   main.innerHTML = `
   <div class = "box2">
@@ -44,8 +50,8 @@ const aboutUs = () => {
       </form>
     </dialog>
   </div>
-</div>
-<div class="card" style="width: 18rem;">
+  </div>
+  <div class="card" style="width: 18rem;">
   <img src="${imageKeyvan}" class="card-img-top" alt="...">
   <div class="card-body">
     <h5 class="card-title">Keyvan Nikazm</h5>
@@ -61,8 +67,8 @@ const aboutUs = () => {
           </form>
         </dialog>
   </div>
-</div>
-<div class="card" style="width: 18rem;">
+  </div>
+  <div class="card" style="width: 18rem;">
   <img src="${imageSimon}" class="card-img-top" alt="...">
   <div class="card-body">
     <h5 class="card-title">Simon Bosseler</h5>
@@ -73,7 +79,7 @@ const aboutUs = () => {
           <form method="dialog">
             <p> Simon est l'un des deux conceptualisateurs de la base de données avec son acolyte Nicolas. Ils ont fourni une base de données structurées afin de déployer une application fonctionnelle et dans le cadre d'une expérience utilisateur à la hauteur des attentes.
             <br> Il a participé à l'insertion de toutes les données dans la base de données ainsi qu'au déploiement de celle-ci.
-             <br> Il a également participé au backend de la création des quizzes.
+              <br> Il a également participé au backend de la création des quizzes.
             </p>
             <div class="text-center">
             <button id="confirmBtn" class="btn btn-dark" style="font-family:sans-serif">Close</button>
@@ -82,8 +88,8 @@ const aboutUs = () => {
         </dialog>
 
   </div>
-</div>
-<div class="card" style="width: 18rem;">
+  </div>
+  <div class="card" style="width: 18rem;">
   <img src="${imageIsmet}" class="card-img-top" alt="...">
   <div class="card-body-AboutUs">
     <h5 class="card-title">Ismet Ismet</h5>
@@ -96,11 +102,11 @@ const aboutUs = () => {
           À l'aube de ses 21 ans, Ismet, l'étudiant en informatique au regard lumineux,
           sculpte l'éclat du virtuel avec une virtuosité éblouissante. En tandem avec
           son complice Keyvan, il danse entre les pixels en tant qu'artisan du frontend.
-           Cependant, ce n'est pas seulement l'élégance visuelle qui émane de ses doigts 
-           agiles ; Ismet tisse également la toile du backend avec une dextérité exceptionnelle. 
-           Aux côtés d'Alexis, il insuffle la vie aux portails d'authentification, 
-           érigeant des remparts numériques impénétrables. Ismet, sculpteur d'expériences, 
-           forge un cyberespace sécurisé où chaque clic résonne comme une symphonie technologique.
+            Cependant, ce n'est pas seulement l'élégance visuelle qui émane de ses doigts 
+            agiles ; Ismet tisse également la toile du backend avec une dextérité exceptionnelle. 
+            Aux côtés d'Alexis, il insuffle la vie aux portails d'authentification, 
+            érigeant des remparts numériques impénétrables. Ismet, sculpteur d'expériences, 
+            forge un cyberespace sécurisé où chaque clic résonne comme une symphonie technologique.
         </p>
         <div class="text-center">
           <button id="confirmBtn" class="btn btn-dark" style="font-family:sans-serif">Close</button>
@@ -108,20 +114,20 @@ const aboutUs = () => {
       </form>
     </dialog>
   </div>
-</div>
-</div>
+  </div>
+  </div>`;
 
-  `
+};
+
+function addDialogEventListener() {
+
   const showStory = document.querySelectorAll('#showStory');
   const Story = document.querySelectorAll('#Story');
 
   for (let i = 0; i < showStory.length; i+=1) {
     showStory[i].addEventListener('click', () => Story[i].showModal());
-    
   }
 
-};
-
-
+}
 
 export default aboutUs;
