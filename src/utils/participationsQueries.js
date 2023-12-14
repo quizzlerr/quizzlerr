@@ -14,7 +14,7 @@ async function createParticipation( userId, quizzId, countQuestionsSucceeded ) {
 
     let participationCreated;
     try {
-        const response = await fetch(`${process.env.API_BASE_URL}quizzes/createParticipation`, options);
+        const response = await fetch(`${process.env.API_BASE_URL}/quizzes/createParticipation`, options);
 
         if (!response.ok) throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
 
