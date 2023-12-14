@@ -104,6 +104,8 @@ function addListenerToButton() {
 
         Navigate('/leaderboard');
 
+        return true;
+
     });
 }
 
