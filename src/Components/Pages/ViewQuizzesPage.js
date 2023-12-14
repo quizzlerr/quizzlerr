@@ -9,7 +9,7 @@ import { getAuthenticatedUser } from '../../utils/auths';
 import { getUserFromUsername } from '../../utils/usersQueries';
 import Navigate from '../Router/Navigate';
 
-const quizzUri = `${process.env.PATH_PREFIX}quizz`;
+const quizzUri = `quizz`;
 const countQuestions = 10;
 
 async function viewQuizzes ( categorieName ) {
