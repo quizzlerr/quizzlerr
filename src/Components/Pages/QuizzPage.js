@@ -466,6 +466,8 @@ async function onPropositionClick(event) {
 
     };
 
+    return true;
+
 };
 
 function initializeSessionData ( currentQuizzId, quizzQuestions, quizzCategory, quizzDifficulty, pointsRapportes, numberOfQuestions, participation, userId ) {
