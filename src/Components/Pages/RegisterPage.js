@@ -10,6 +10,7 @@ const RegisterPage = () => {
   renderPageTitle('Register');
   renderRegisterPage();
   addListenerToConfidentialityText();
+  addListenerToLoginText();
 };
 
 function renderRegisterPage() {
@@ -52,13 +53,31 @@ function renderRegisterPage() {
                         <input type="submit" id="submitBtn">
                     </div>
                 </form>
-                <a href="/login">Vous possédez un compte ?</a>
+                <a id="href-login">Vous possédez un compte ?</a>
             </div>
         </div>
     </div>`;
 
   const submitButton = document.querySelector('#registerForm');
   submitButton.addEventListener('submit', onRegister);
+}
+
+function addListenerToLoginText() {
+  const text = document.querySelector('#href-login');
+
+  text.style.cursor = 'pointer';
+  text.style.textDecoration = 'underline';
+
+  text.addEventListener('click', (e) => {
+    onLoginText(e);
+  });
+}
+function onLoginText(e) {
+  e.preventDefault();
+
+  Navigate(`${process.env.PATH_PREFIX}login`);
+
+  return true;
 }
 
 function addListenerToConfidentialityText() {

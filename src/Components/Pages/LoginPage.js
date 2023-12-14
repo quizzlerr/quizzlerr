@@ -6,6 +6,7 @@ import { loginUser } from '../../utils/authsQueries';
 
 const LoginPage = () => {
   renderLoginPage();
+  addListenerToRegisterText();
 };
 
 function renderLoginPage() {
@@ -34,7 +35,7 @@ function renderLoginPage() {
                         <input type="submit" id="submitBtn">
                     </div>
                 </form>
-                <a href="/register">Vous n'avez pas de compte ?</a>
+                <a id="href-register">Vous n'avez pas de compte ?</a>
             </div>
         </div>
     </div>
@@ -43,6 +44,26 @@ function renderLoginPage() {
   const submitButton = document.querySelector('#loginForm');
   submitButton.addEventListener('submit', onLogin);
 }
+
+
+function addListenerToRegisterText() {
+    const text = document.querySelector('#href-register');
+
+    text.style.cursor = 'pointer';
+    text.style.textDecoration = 'underline';
+
+    text.addEventListener('click', (e) => {
+        onLoginText(e);
+    });
+};
+
+function onLoginText(e) {
+    e.preventDefault();
+
+    Navigate(`${process.env.PATH_PREFIX}register`);
+
+    return true;
+};
 
 async function onLogin(e) {
   e.preventDefault();
