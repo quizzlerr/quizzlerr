@@ -12,7 +12,7 @@ import scienceImg2 from '../img/img_science/img_sci2.jpg';
 import scienceImg3 from '../img/img_science/img_sci3.jpg';
 
 let viewQuizzesPath;
-if ( process.env.PATH_PREFIX === '/quizzlerr' ) {
+if ( process.env.PATH_PREFIX === '/quizzlerr/' ) {
 
   viewQuizzesPath = '/viewQuizzes'
 
