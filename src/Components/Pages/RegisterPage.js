@@ -21,22 +21,22 @@ const RegisterPage = () => {
         </div>
         <div class="right-container">
             <div class="center-content">
-                <h1>REGISTER</h1>
+                <h1>créer un compte</h1>
                 <form id="registerForm">
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input type="email"  name="email" id="registerEmail">
                     </div>
                     <div class="form-group">
-                        <label for="username">Username</label>
+                        <label for="username">nom d'utilisateur</label>
                         <input type="text"  name="username" id="registerUsername">
                     </div>
                     <div class="form-group">
-                        <label for="password">Password</label>
+                        <label for="password">mot de passe</label>
                         <input type="password" name="password" id="registerPassword">
                     </div>
                     <div class="form-group">
-                        <label for="confirmPassword">Confirm password</label>
+                        <label for="confirmPassword">confirmation du mot de passe</label>
                         <input type="password" name="confpassword" id="registerConfPassword">
                     </div>
                     <div class="form-group">

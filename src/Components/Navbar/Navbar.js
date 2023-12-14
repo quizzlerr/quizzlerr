@@ -11,22 +11,22 @@ const Navbar = () => {
       return `
          
       <li class="nav-item"><a class="nav-link" href="#" data-uri="/leaderboard">classement</a></li>
-        <li class="nav-item"><a class="nav-link" href="#" data-uri="/logout">Logout</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" data-uri="/logout">se déconnecter</a></li>
         <li class="nav-item"><a class="nav-link" href="#" data-uri="/deleteUser">supprimer le profil</a></li>
         
       `;
     } 
       // Si l'utilisateur n'est pas authentifié, affiche "Login" et "Register"
       return `
-        <li class="nav-item"><a class="nav-link" href="#" data-uri="/login">Login</a></li>
-        <li class="nav-item"><a class="nav-link" href="#" data-uri="/register">Register</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" data-uri="/login">se connecter</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" data-uri="/register">créer un compte</a></li>
       `;
     
   };
 
   const renderAdminLinks = () => {
     if(isAdmin()){
-      return `<li class="nav-item"> <a class="nav-link" href="#" data-uri="/creationQuizz">Creation quizz</a> </li>`;
+      return `<li class="nav-item"> <a class="nav-link" href="#" data-uri="/creationQuizz">création d'un quizz</a> </li>`;
     }
       return ``;
   };
@@ -51,7 +51,7 @@ const Navbar = () => {
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link" href="#" data-uri="/aboutUs">About</a>
+              <a class="nav-link" href="#" data-uri="/aboutUs">à propos de nous</a>
             </li>
             ${renderAdminLinks()}
             ${renderAuthLinks()}

@@ -17,14 +17,14 @@ const LoginPage = () => {
         </div>
         <div class="right-container">
             <div class="center-content">
-                <h1>LOGIN</h1>
+                <h1>se connecter</h1>
                 <form id="loginForm">
                     <div class="form-group">
-                        <label for="username">Username</label>
+                        <label for="username">nom d'utilisateur</label>
                         <input type="text"  name="username" id="username">
                     </div>
                     <div class="form-group">
-                        <label for="password">Password</label>
+                        <label for="password">mot de passe</label>
                         <input type="password" name="password" id="password">
                     </div>
                     <div class="form-group">
