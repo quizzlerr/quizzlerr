@@ -318,7 +318,7 @@ function addEndQuizzButtonListener() {
 
     let countOfAttempts = 1;
 
-    if ( updateParticipation !== null ) {
+    if ( updatedParticipation !== null ) {
 
       countOfAttempts = updatedParticipation.nbr_tentatives;
 
