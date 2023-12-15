@@ -1,4 +1,4 @@
-import geographyImg from "../img/géographie.jpg"
+import geographyImg from "../img/geographie.jpg"
 import historyImg from "../img/histoire.jpg";
 import sciencesImg from "../img/science.jpg";
 import historyImg1 from "../img/img_histoire/img_histoire1.jpg";

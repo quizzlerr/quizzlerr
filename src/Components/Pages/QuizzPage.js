@@ -63,7 +63,9 @@ async function QuestionnairePage() {
 
   const sessionQuizzId = Number(sessionStorage.getItem('quizzId'));
 
-  const { name: categoryName, image: categoryImage } = getQuizzCategoryData(quizz.categorie);
+  console.log(quizz.categorie);
+
+  const { name: categoryName, image : categoryImage } = getQuizzCategoryData(quizz.categorie);
 
   if (sessionQuizzId !== quizzId) {
     // eslint-disable-next-line no-console
@@ -113,32 +115,28 @@ function randomQuestionsOrder(quizz) {
   const randomQuestionsOrderArray = [];
 
   while (questions.length > 0) {
-
     const randomQuestionIndex = Math.floor(Math.random() * questions.length);
 
     const randomQuestion = questions[randomQuestionIndex];
 
     questions.splice(randomQuestionIndex, 1);
 
-    const {propositions} = randomQuestion;
+    const { propositions } = randomQuestion;
 
     const randomPropositionsOrderArray = [];
 
-    while ( propositions.length > 0 ) {
-
+    while (propositions.length > 0) {
       const randomPropositionIndex = Math.floor(Math.random() * propositions.length);
 
       const randomProposition = propositions[randomPropositionIndex];
 
       propositions.splice(randomPropositionIndex, 1);
-  
-      randomPropositionsOrderArray.push(randomProposition);
 
+      randomPropositionsOrderArray.push(randomProposition);
     }
 
     randomQuestion.propositions = randomPropositionsOrderArray;
     randomQuestionsOrderArray.push(randomQuestion);
-
   }
 
   return randomQuestionsOrderArray;
@@ -152,7 +150,7 @@ function renderQuestionnaire(questions, indexQuestion, categoryName, categoryIma
 
   const main = document.querySelector('main');
   main.innerHTML = `
-        <div class="glass-container-pageQuestion" style="url(${categoryImage})">
+        <div class="glass-container-pageQuestion"  id="QuizzPageContainer" style="background-image:url(${categoryImage});">
             <div class="card-pageQuestion">
             <div class="card-header">
                 <div id="counterQuestionsWrapper"></div>
