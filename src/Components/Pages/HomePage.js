@@ -163,10 +163,33 @@ function handleContextCanvas(animationId) {
     'webglcontextlost',
     (e) => {
       e.preventDefault();
+      // eslint-disable-next-line no-console
+      console.error('WebGL context lost. Attempting to recover...');
+
       cancelAnimationFrame(animationId);
+
+      const context = canvas.getContext('webgl');
+      if (!context) {
+        // eslint-disable-next-line no-console
+        console.error('Failed to recreate WebGL context. Reloading the page...');
+        return;
+      }
+
+      const renderer = new WebGLRenderer({
+        antialias: true,
+        alpha: true,
+        canvas,
+      });
+
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      const newAnimationId = renderThreeDimension();
+      handleContextCanvas(newAnimationId);
     },
     false,
   );
 }
+
 
 export default HomePage;
