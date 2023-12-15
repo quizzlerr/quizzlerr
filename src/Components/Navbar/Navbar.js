@@ -1,4 +1,6 @@
 // eslint-disable-next-line no-unused-vars
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 import logoQuizzLer from '../../img/logo-site.png';
 import { isAuthenticated, isAdmin  } from '../../utils/auths';
 

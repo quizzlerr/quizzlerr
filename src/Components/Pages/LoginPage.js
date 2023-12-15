@@ -46,25 +46,24 @@ function renderLoginPage() {
   submitButton.addEventListener('submit', onLogin);
 }
 
-
 function addListenerToRegisterText() {
-    const text = document.querySelector('#href-register');
+  const text = document.querySelector('#href-register');
 
-    text.style.cursor = 'pointer';
-    text.style.textDecoration = 'underline';
+  text.style.cursor = 'pointer';
+  text.style.textDecoration = 'underline';
 
-    text.addEventListener('click', (e) => {
-        onLoginText(e);
-    });
-};
+  text.addEventListener('click', (e) => {
+    onLoginText(e);
+  });
+}
 
 function onLoginText(e) {
-    e.preventDefault();
+  e.preventDefault();
 
-    Navigate(`/register`);
+  Navigate(`/register`);
 
-    return true;
-};
+  return true;
+}
 
 async function onLogin(e) {
   e.preventDefault();
@@ -78,22 +77,18 @@ async function onLogin(e) {
   const authenticatedUser = await loginUser(username, password);
 
   if (authenticatedUser === 'Username not found') {
-    errorMessageElement.innerHTML = 'Nom d\'utilisateur introuvable';
+    errorMessageElement.innerHTML = "Nom d'utilisateur introuvable";
     return;
-  } if (authenticatedUser === 'Password does not match') {
+  }
+  if (authenticatedUser === 'Password does not match') {
     errorMessageElement.innerHTML = 'Le mot de passe ne correspond pas';
     return;
-  } 
-    setAuthenticatedUser(authenticatedUser);
+  }
+  setAuthenticatedUser(authenticatedUser);
 
-    console.log(authenticatedUser);
+  Navbar();
 
-    Navbar();
-
-    Navigate('/');
-
-    // return true;
-  
-};
+  Navigate('/');
+}
 
 export default LoginPage;

@@ -29,20 +29,9 @@ async function createParticipation( userId, quizzId, countQuestionsSucceeded ) {
 
 async function getParticipation( userId, quizzId ) {
 
-    const options = {
-        method: 'POST',
-        body: JSON.stringify({
-        userId,
-        quizzId
-        }),
-        headers: {
-        'Content-Type': 'application/json',
-        },
-    };
-
     let participationFound;
     try {
-        const response = await fetch(`${process.env.API_BASE_URL}/quizzes/getParticipation`, options);
+        const response = await fetch(`${process.env.API_BASE_URL}/quizzes/getParticipation?userId=${userId}&quizzId=${quizzId}`);
 
         if (!response.ok) throw new Error(`fetch error : ${response.status} : ${response.statusText}`);
 

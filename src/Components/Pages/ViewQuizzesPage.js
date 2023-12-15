@@ -226,7 +226,7 @@ function createCard(
   }
 
   return `
-    <div class="card viewQuizzes-cards" style="width:80%;margin:auto;">
+    <div class="card viewQuizzes-cards" style="width:80%;margin:10%;">
         <a class="viewQuizzes-button" id="${cardIdToUse}" style="cursor:${cursorToUse};">
             <img class="card-img-top" src="${quizzImage}" alt="Card image cap">
         </a>

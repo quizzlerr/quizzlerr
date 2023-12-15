@@ -59,7 +59,10 @@ function renderAboutUsPage() {
     </div>
         <dialog id="Story">
           <form method="dialog">
-            <p>Pudor in debeo sum nostro illum orationi fortius quidem fortius postulabat aetas fortius datam Neque robustioribus tuli patiebatur meum versari aliquis Atratino hunc accusationis accusationis erga dicendi et Vellem debeo enim Atratino dicendi tueri et accusationis patiebatur tuli parentemque istam tuus quidem et vobis accusationis accusationis moderatur beneficium in magis.</p>
+            <p>
+            Keyvan est un jeune homme de 20 ans qui a imaginé et réalisé le frontend du site avec son acolyte Ismet. Passionné par le frontend, Keyvan a voulu rendre le site le plus responsive possible. Pour cela, il a pensé à rendre le site structuré, tout en gardant une expérience utilisateur raffinée et moderne à la fois.
+            <br>
+            Avec l'ajout d'éléments 3D et 2D, il a permis de proposer à chaque utilisateur un environnement où chacun pourrait s'épanouir visuellement.</p>
             <div class="text-center">
             <button id="confirmBtn" class="btn btn-dark" style="font-family:sans-serif">Close</button>
           </div>

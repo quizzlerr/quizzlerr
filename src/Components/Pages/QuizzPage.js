@@ -63,8 +63,6 @@ async function QuestionnairePage() {
 
   const sessionQuizzId = Number(sessionStorage.getItem('quizzId'));
 
-  console.log(quizz.categorie);
-
   const { name: categoryName, image : categoryImage } = getQuizzCategoryData(quizz.categorie);
 
   if (sessionQuizzId !== quizzId) {
@@ -316,7 +314,17 @@ function addEndQuizzButtonListener() {
 
     await saveParticipationForQuizz(userId, quizzId);
 
-    ResultQuizzPage(category, difficulty, pointsTotauxRapportes, percentageQuestionsSucceeded);
+    const updatedParticipation = await getParticipation(userId, quizzId);
+
+    let countOfAttempts = 1;
+
+    if ( updateParticipation !== null ) {
+
+      countOfAttempts = updatedParticipation.nbr_tentatives;
+
+    }
+
+    ResultQuizzPage(category, difficulty, pointsTotauxRapportes, percentageQuestionsSucceeded, quizzId, countOfAttempts );
 
     return true;
   });
@@ -334,7 +342,9 @@ function addNextQuestionButtonListener() {
 
 async function saveParticipationForQuizz(userId, quizzId) {
   // Pas connecté
-  if (userId === -1) return;
+  if (userId === -1) return null;
+
+  let newParticipation;
 
   const participation = await getParticipation(userId, quizzId);
 
@@ -346,7 +356,7 @@ async function saveParticipationForQuizz(userId, quizzId) {
   // Pas de participation
 
   if (participation === null) {
-    await createParticipation(userId, quizzId, countRightAnswers);
+    newParticipation = await createParticipation(userId, quizzId, countRightAnswers);
     await updateUserPoints(userId, nouveauNombrePointsRapportes);
   }
   // Déjà une participation
@@ -357,14 +367,17 @@ async function saveParticipationForQuizz(userId, quizzId) {
 
     // Meilleur score
     if (ancienNombrePointsRapportes < nouveauNombrePointsRapportes) {
-      await updateParticipation(userId, quizzId, countRightAnswers);
+      newParticipation = await updateParticipation(userId, quizzId, countRightAnswers);
       await updateUserPoints(userId, nouveauNombrePointsRapportes - ancienNombrePointsRapportes);
     } else {
       // Moins bon ou même score
 
-      await updateParticipation(userId, quizzId, oldCountRightAnswers);
+      newParticipation = await updateParticipation(userId, quizzId, oldCountRightAnswers);
     }
   }
+
+  // eslint-disable-next-line consistent-return
+  return newParticipation;
 }
 
 function removePropositionsListeners() {

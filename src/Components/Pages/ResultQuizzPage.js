@@ -3,10 +3,12 @@ import Navigate from '../Router/Navigate';
 import { isAuthenticated } from '../../utils/auths';
 
 const ResultQuizzPage = (
-  category = 'Histoire',
-  difficulty = 'Moyenne',
-  pointsTotauxRapportes = 0,
-  percentageQuestionsSucceeded = 0,
+  category,
+  difficulty,
+  pointsTotauxRapportes,
+  percentageQuestionsSucceeded,
+  quizzId,
+  countOfAttempts,
 ) => {
   if (category === undefined) {
     return Navigate(process.env.PATH_PREFIX);
@@ -35,8 +37,13 @@ const ResultQuizzPage = (
   );
 
   if (isAuthenticated()) {
-    addButtonElement();
-    addListenerToButton();
+    addButtonLeaderboardElement();
+    addListenerToLeaderboardButton();
+  }
+
+  if ( countOfAttempts < 3 ) {
+    addButtonPlayAgainElement();
+    addListenerToPlayAgainButton(quizzId);
   }
 
   if (isSucceeded) {
@@ -63,24 +70,25 @@ function renderResults(
                 <div id="resultQuizz-fireworks"></div>
                 <div id="resultQuizz-glass-container">
                     <div class="main">
-                        <h1> Résultat du Quizz </h1>
+                        <h1 class="ResultQuizz-text"> Résultat du Quizz </h1>
 
-                        <h4 class="${textClassName}"> ${textContent} </h4>
+                        <h4 class="${textClassName} ResultQuizz-text-color"> ${textContent} </h4>
 
                         <div class="box-result">
                             <div class="card-result">
-                                <h4 class="fs-5"> Difficulté : <p class="${textClassName}"> ${difficulty} </p> </h4>
+                                <h4 class="titre-resultat"> Difficulté : </h4><p class="${textClassName}"> ${difficulty} </p> 
                             </div>
                             <div class="card-result">
-                                <h4 class="fs-5"> Catégorie : <p class="${textClassName}"> ${category} </p> </h4>
+                                <h4 class="titre-resultat"> Catégorie : </h4><p class="${textClassName}"> ${category} </p> 
                             </div>
                             <div class="card-result">
-                                <h4 class="fs-5"> Points gagnés : <p class="${textClassName}"> ${pointsTotauxRapportes} pts </p> </h4>
+                                <h4 class="titre-resultat"> Points gagnés : </h4><p class="${textClassName}"> ${pointsTotauxRapportes} pts </p> 
                             </div>
                             <div class="card-result">
-                                <h4 class="fs-5"> Pourcentage de réussite : <p class="${textClassName}"> ${percentageQuestionsSucceeded}% </p> </h4>
+                                <h4 class="titre-resultat"> Pourcentage de réussite : </h4><p class="${textClassName}"> ${percentageQuestionsSucceeded}% </p> 
                             </div>
-                            <div id="button-wrapper"></div>
+                            <div id="button-leaderboard-wrapper"></div>
+                            <div id="button-playagain-wrapper"></div>
                             </div>
                     </div>
                 </div>
@@ -89,22 +97,44 @@ function renderResults(
     `;
 }
 
-function addButtonElement() {
-  const buttonWrapper = document.querySelector('#button-wrapper');
+function addButtonLeaderboardElement() {
+  const buttonWrapper = document.querySelector('#button-leaderboard-wrapper');
 
-  buttonWrapper.innerHTML = `
+  buttonWrapper.innerHTML += `
     <div class="text-center">
-    <button type="button" class="btn btn-outline-primary" id="button-result">Consulter le classement </button>
+    <button type="button" class="btn btn-outline-primary" id="button-leaderboard">Consulter le classement </button>
     </div>`;
 }
 
-function addListenerToButton() {
-  const button = document.querySelector('#button-result');
+function addListenerToLeaderboardButton() {
+  const button = document.querySelector('#button-leaderboard');
 
   button.addEventListener('click', (e) => {
     e.preventDefault();
 
     Navigate('/leaderboard');
+
+    return true;
+  });
+}
+
+function addButtonPlayAgainElement() {
+  const buttonWrapper = document.querySelector('#button-playagain-wrapper');
+
+  buttonWrapper.innerHTML += `
+    <br>
+    <div class="text-center">
+    <button type="button" class="btn btn-outline-success" id="button-playagain"> Rejouer </button>
+    </div>`;
+}
+
+function addListenerToPlayAgainButton(quizzId) {
+  const button = document.querySelector('#button-playagain');
+
+  button.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    Navigate(`/quizz?quizzId=${quizzId}`);
 
     return true;
   });

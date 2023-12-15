@@ -84,6 +84,9 @@ function renderThreeDimension() {
   const clock = new Clock();
 
   function tick() {
+
+    setTimeout( () => {
+
     // une function pour avoir un nouveau rendu
     const time = clock.getElapsedTime(); // compter le temps qui c'est ecouler
     groupe.rotation.y = time * 0.1; // controle automatique
@@ -93,6 +96,7 @@ function renderThreeDimension() {
     renderer.render(scene, camera); // faire le rendu par rapport a la camera
 
     requestAnimationFrame(tick); // permet de rappeler la fonction pour avoir des rendu en permanence
+    }, 7.5);
   }
 
   const animationId = tick();
