@@ -71,7 +71,7 @@ function renderLoadingMessage() {
 
   html.style.cursor = 'wait';
 
-  main.innerHTML = createTitle('Loading quizzes...', 'h1');
+  main.innerHTML = createTitle('Chargement des quizzs...', 'h1');
 
 };
 
