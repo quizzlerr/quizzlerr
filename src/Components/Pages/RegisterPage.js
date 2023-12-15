@@ -112,7 +112,7 @@ async function onRegister(e) {
 
   if (password !== confPassword) {
 
-    errorMessageElement.innerHTML = 'Passwords do not match';
+    errorMessageElement.innerHTML = 'les mots de passe ne sont pas identique';
     return;
 
   } 
@@ -123,12 +123,12 @@ async function onRegister(e) {
 
   if (authenticatedUser === 'Email already registered') {
 
-    errorMessageElement.innerHTML = 'Email already registered';
+    errorMessageElement.innerHTML = 'l email à déjà été utilisé';
     return;
 
   } if (authenticatedUser === 'Username already registered') {
 
-    errorMessageElement.innerHTML = 'Username already registered';
+    errorMessageElement.innerHTML = 'le nom d utilisateur à déjà été utilisé ';
     return; 
 
   }
