@@ -31,6 +31,7 @@ function renderLoginPage() {
                         <label for="password">mot de passe</label>
                         <input type="password" name="password" id="password">
                     </div>
+                    <div id="error-message" class="form-group error-message"></div>
                     <div class="form-group">
                         <input type="submit" id="submitBtn">
                     </div>
@@ -71,14 +72,28 @@ async function onLogin(e) {
   const username = document.querySelector('#username').value;
   const password = document.querySelector('#password').value;
 
+  const errorMessageElement = document.querySelector('#error-message');
+  errorMessageElement.innerHTML = '';
+
   const authenticatedUser = await loginUser(username, password);
 
-  setAuthenticatedUser(authenticatedUser);
-  Navbar();
+  if (authenticatedUser === 'Username not found') {
+    errorMessageElement.innerHTML = 'Nom d\'utilisateur introuvable';
+    return;
+  } if (authenticatedUser === 'Password does not match') {
+    errorMessageElement.innerHTML = 'Le mot de passe ne correspond pas';
+    return;
+  } 
+    setAuthenticatedUser(authenticatedUser);
 
-  Navigate('/');
+    console.log(authenticatedUser);
 
-  return true;
-}
+    Navbar();
+
+    Navigate('/');
+
+    // return true;
+  
+};
 
 export default LoginPage;

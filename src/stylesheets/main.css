@@ -483,6 +483,18 @@ h5, .btn-primary{
     }
 }
 
+.error-message {
+    visibility: hidden;
+    align-items: center;
+    color: red;
+    border: 1px solid red; 
+  }
+  
+  
+.error-message:not(:empty) {
+visibility: visible;
+}
+
 
 
 /* CLASSEMENT PAGE */

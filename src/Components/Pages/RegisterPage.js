@@ -49,6 +49,7 @@ function renderRegisterPage() {
                             nos <a id="href-confidentiality">conditions générales d'utilisation</a>
                         </p>
                     </div>
+                    <div id="error-message" class="form-group error-message"></div>
                     <div class="form-group">
                         <input type="submit" id="submitBtn">
                     </div>
@@ -106,19 +107,41 @@ async function onRegister(e) {
   const confPassword = document.querySelector('#registerConfPassword').value;
   const username = document.querySelector('#registerUsername').value;
 
+  const errorMessageElement = document.querySelector('#error-message');
+  errorMessageElement.innerHTML = '';
+
   if (password !== confPassword) {
-    throw new Error('Passwords do not match');
-  }
+
+    errorMessageElement.innerHTML = 'Passwords do not match';
+    return;
+
+  } 
 
   const authenticatedUser = await registerUser(email, username, password);
 
-  setAuthenticatedUser(authenticatedUser);
+  console.log(JSON.stringify(authenticatedUser));
 
-  Navbar();
+  if (authenticatedUser === 'Email already registered') {
 
-  Navigate('/');
+    errorMessageElement.innerHTML = 'Email already registered';
+    return;
 
-  return true;
+  } if (authenticatedUser === 'Username already registered') {
+
+    errorMessageElement.innerHTML = 'Username already registered';
+    return; 
+
+  }
+    console.log(password);
+    console.log(confPassword);
+    setAuthenticatedUser(authenticatedUser);
+
+    Navbar();
+
+    Navigate('/');
+
+    // return true;
+    
 }
 
 export default RegisterPage;

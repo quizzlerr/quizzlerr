@@ -11,7 +11,7 @@ const DeleteUser = () => {
   DeleteUserM();
   clearAuthenticatedUser();
   Navbar();
-  Navigate(process.env.PATH_PREFIX);
+  Navigate('/');
 };
 
 async function DeleteUserM() {
