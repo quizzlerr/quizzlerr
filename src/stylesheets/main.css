@@ -917,7 +917,7 @@ dialog form {
     font-weight: 700;
     color: rgb(0, 0, 0);
     text-align: center;
-    margin-left: 25px;
+    margin-left: 10px;
     font-family: 'Playfair Display', sans-serif;
     letter-spacing: 1px;
     padding: 2% 0 2% 0;
@@ -949,12 +949,24 @@ dialog{
 /*  responsive   */
 
 @media screen and (max-width: 800px) {
+
+    .homepage-glass-container h1{
+        font-size: 60px;
+        font-weight: 700;
+    }
+
+    .homepage-glass-container h4{
+        font-size: 25px;
+    }
+    .homepage-glass-container{
+        max-width:80vh;
+    }
     .box{
-        display: block;
+        display: inline-block;
     }
     .card{
         width: 150%;
-        margin-bottom: 10px;
+        margin-bottom: 25px;
     }
     .card-img-top{
        height: 30vh;
@@ -968,6 +980,7 @@ dialog{
 @media screen and (max-width: 1000px) {
     .card{
         width: 100%;
+        transform: translate(-3%, -11%);
     }
     .card-img-top{
        height: 30vh;
@@ -989,16 +1002,18 @@ dialog{
 @media screen and (max-width: 800px) {
     .container-register{
         display: block;
-        margin: 20%;
-        width: 70%;
+        margin-left: 15%;
+        width: 80%;
+        margin-bottom: 20%;
     }
 }
 
 @media screen and (max-width: 800px) {
     .container-login{
         display: block;
-        margin: 20%;
-        width: 70%;
+        margin-left: 15%;
+        width: 80%;
+        margin-bottom: 20%;
     }
 }
 
@@ -1013,7 +1028,13 @@ dialog{
 @media screen and (max-width: 800px) {
     .viewQuizzes-box{
         display: block;
-        width: 100%;
+        transform: translate(-20%, -11%);
+        width: 90vh;
+        margin-top: 35%;
+    }
+
+    .all-quizzes{
+        font-size: 7vh;
     }
 
     .viewQuizzes-cards{
@@ -1022,6 +1043,10 @@ dialog{
 }
 
 @media screen and (max-width: 1000px) {
+
+    .glass-container-pageQuestion{
+        max-width: 90%;
+    }
     .card-header{
         display: inline-block;
         margin: 10% 26% 10%;
@@ -1064,17 +1089,18 @@ dialog{
     }
 
     .proposition-element{
-        font-size: 9px;
+        font-size: 12px;
         font-weight: 1100;
         margin-bottom: 10px;
+        padding: 5% 5% 18% 5%;
      }
 
     .QuizzPage-default-style-button{
         display: block;
         align-items: center;
-        margin-right: 30%;
-        width: auto;
-        font-size: 12px;
+        width: 50%;
+        transform: translate(-6%, -4%);
+        font-size: 15px;
         font-weight: 800;
     }
     .QuizzPage-set-style-button{
@@ -1109,17 +1135,40 @@ dialog{
 }
 
 @media screen and (max-width: 800px){
+
+    .sous-classement-body{
+        max-width: 92%;
+    }
+    .classement-header{
+        max-width: 117.7%;
+    }
+
+    .medal-container{
+        margin: 0 15% 0 15%;
+    }
+
     .medal{
-        width: 15vh;
+        width: 11.5vh;
+        height: 25vh;
+        margin: 5%;
     }
 
     .medal img{
-        height: 14vh;
-        width: 10vh;
+        height: 8vh;
+        width: 6vh;
     }
+
+    .scoreClassement{
+        font-size: 16px;
+    }
+
 }
 
 @media screen and (max-width : 800px) {
+
+   #resultQuizz-glass-container{
+    max-width: 90%;
+   }
    .card-result p{
     font-size: 15px;
    }
@@ -1147,3 +1196,13 @@ dialog{
 
 }
 
+
+@media screen and (max-width : 800px) {
+    #creationQuizzContainer2{
+       max-width: 85%;
+    }
+
+    /* .propositionsInput{ // probleme pour les inputs
+        margin-left: 10px;
+    } */
+}

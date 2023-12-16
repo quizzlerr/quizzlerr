@@ -251,7 +251,7 @@ function addListenerToCard(cardId, buttonSrc) {
 
 function createTitle(titleText, titleSize) {
   return `
-        <${titleSize} class="viewQuizzes-title-${titleSize}">
+        <${titleSize} class="viewQuizzes-title-${titleSize} all-quizzes">
             ${titleText}
         </${titleSize}>
     `;
