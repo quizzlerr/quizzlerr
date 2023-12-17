@@ -96,7 +96,7 @@ function renderThreeDimension() {
     renderer.render(scene, camera); // faire le rendu par rapport a la camera
 
     requestAnimationFrame(tick); // permet de rappeler la fonction pour avoir des rendu en permanence
-    }, 15);
+    }, 40);
   }
 
   const animationId = tick();
