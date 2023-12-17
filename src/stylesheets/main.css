@@ -568,6 +568,7 @@ visibility: visible;
 
 .medal-container {
     display: flex;
+    justify-content: space-around;
     margin-bottom: 20px;
 }
 
@@ -576,7 +577,6 @@ visibility: visible;
     border-radius: 30px 30px;
     background-color: white;
     overflow: hidden;
-    
 }
 
 .medal:nth-child(3){
