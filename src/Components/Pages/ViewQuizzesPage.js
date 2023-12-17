@@ -120,12 +120,16 @@ function generateQuizzesButtons(quizzesParticipationsArray, quizzDataImages, qui
         cardId,
       );
 
+
       box.innerHTML += image;
 
       quizzNumber += 1;
     }
+    const containeurBox = document.createElement('div');
+    containeurBox.className = 'text-center';
 
-    main.appendChild(box);
+    containeurBox.appendChild(box);
+    main.appendChild(containeurBox);
 
     return true;
   });
@@ -226,7 +230,8 @@ function createCard(
   }
 
   return `
-    <div class="card viewQuizzes-cards" style="width:80%;margin:10%;">
+  <div class="text-center">
+    <div class="card viewQuizzes-cards">
         <a class="viewQuizzes-button" id="${cardIdToUse}" style="cursor:${cursorToUse};">
             <img class="card-img-top" src="${quizzImage}" alt="Card image cap">
         </a>
@@ -234,6 +239,7 @@ function createCard(
             <h3 class="card-title viewQuizzes-title-${difficultyColor}">Quizz n°${quizzNumber}</h5>
             <p class="card-text-viewQuizz">${text}</p>
         </div>
+    </div>
     </div>`;
 }
 
