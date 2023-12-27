@@ -18,7 +18,7 @@ async function viewQuizzes(categorieName) {
 
   clearPage();
 
-  renderLoadingMessage();
+  const timer = renderLoadingMessage();
 
   const authenticatedUser = getAuthenticatedUser();
   const defaultUserId = -1;
@@ -41,6 +41,8 @@ async function viewQuizzes(categorieName) {
   const quizzDataCategoryName = quizzData.name;
 
   const quizzesParticipations = await loadQuizzes(category, userId);
+
+  clearInterval(timer);
 
   clearPage();
 
@@ -71,7 +73,35 @@ function renderLoadingMessage() {
 
   html.style.cursor = 'wait';
 
-  main.innerHTML = createTitle('Chargement des quizzs...', 'h1');
+  const divId = 'loadingMessage';
+
+  main.innerHTML = createTitle('Chargement des quizzs...', 'h1', divId);
+
+  let dots = '.';
+  let counter = 0;
+
+  const timer = setInterval(() => {
+
+    const text = `Chargement des quizzs${dots}`;
+
+      main.innerHTML = createTitle(text, 'h1');
+
+      if ( counter % 3 === 0 ) {
+
+        dots = '.';
+  
+      } else {
+  
+        dots += '.';
+  
+      };
+
+      counter += 1;
+
+
+  }, 750);
+
+  return timer;
 
 };
 
@@ -255,9 +285,9 @@ function addListenerToCard(cardId, buttonSrc) {
   }
 }
 
-function createTitle(titleText, titleSize) {
+function createTitle(titleText, titleSize, titleId="default") {
   return `
-        <${titleSize} class="viewQuizzes-title-${titleSize} all-quizzes">
+        <${titleSize} class="viewQuizzes-title-${titleSize} all-quizzes" id="${titleId}">
             ${titleText}
         </${titleSize}>
     `;
